@@ -13,7 +13,7 @@ RUN dotnet publish -c Release -o /app/publish -r linux-musl-x64 --no-self-contai
 # ── Runtime stage ─────────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
 
-# Use HTTP on 5080 to match the customer port without certificate complexity
+# Use HTTP on 5080 without certificate complexity
 ENV ASPNETCORE_URLS=http://+:5080
 ENV ASPNETCORE_HTTP_PORT=5080
 
@@ -21,7 +21,7 @@ ENV ASPNETCORE_HTTP_PORT=5080
 RUN apk add --no-cache icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
-# Run as non-root — mirrors customer's security posture
+# Run as non-root
 RUN adduser --disabled-password --home /app --gecos '' nonroot \
     && chown -R nonroot /app
 USER nonroot
